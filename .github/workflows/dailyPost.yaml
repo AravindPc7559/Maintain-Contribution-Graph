@@ -1,0 +1,33 @@
+name: Daily 5 Commits
+
+on:
+  schedule:
+    # Runs daily at 00:10 UTC (~05:40 IST)
+    - cron: "10 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Make 5 commits
+        run: |
+          for i in 1 2 3 4 5
+          do
+            echo "Commit $i on $(date -u)" >> daily-log.txt
+            git add daily-log.txt
+            git commit -m "chore: automated commit $i"
+            sleep 10
+          done
+
+      - name: Push commits
+        run: git push

@@ -1,4 +1,4 @@
-name: Daily 5 Commits
+name: Daily Random Commits
 
 on:
   schedule:
@@ -22,9 +22,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Make 5 commits
+      - name: Make random commits (under 10)
         run: |
-          for i in 1 2 3 4 5
+          COMMITS=$((RANDOM % 9 + 1))
+          echo "Making $COMMITS commits"
+
+          for ((i=1; i<=COMMITS; i++))
           do
             echo "Commit $i on $(date -u)" >> daily-log.txt
             git add daily-log.txt
